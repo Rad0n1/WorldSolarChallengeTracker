@@ -10,13 +10,50 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Fetch CSV
+      - name: Fetch CSV (grabbag, retries, ETag)
+        shell: bash
         run: |
+          set -euo pipefail
           mkdir -p telemetry
+
+          URL="https://telemetry.worldsolarchallenge.org/grabbag/alldata.csv"
           TS=$(date -u +%FT%TZ | tr ':' '-')
-          curl -fsSL https://telemetry.worldsolarchallenge.org/grabbag/alldata.csv -o telemetry/alldata-$TS.csv
-          # keep a rolling symlink-like copy for your homepage if you want:
-          cp telemetry/alldata-$TS.csv telemetry/alldata-latest.csv
+          OUT="telemetry/alldata-$TS.csv"
+
+          # Use ETag so we only commit if the file actually changed
+          ETAG_FILE="telemetry/.alldata.etag"
+
+          echo "Fetching $URL"
+          attempt=1; max=8; delay=1
+          while :; do
+            HTTP=$(curl -sS -L -w '%{http_code}' -o "$OUT.part" \
+              -H 'Cache-Control: no-cache' \
+              -H 'Pragma: no-cache' \
+              -H 'User-Agent: BWSC-Telemetry-Fetch/1.0 (+github-actions)' \
+              --etag-compare "$ETAG_FILE" --etag-save "$ETAG_FILE" \
+              "$URL" || true)
+
+            if [[ "$HTTP" == "200" ]]; then
+              # basic sanity: CSV header should contain 'time' and 'latitude'
+              head -n 1 "$OUT.part" | grep -qiE 'time,.*lat|latitude' || { echo "Header check failed"; rm -f "$OUT.part"; exit 0; }
+              mv "$OUT.part" "$OUT"
+              cp "$OUT" telemetry/alldata-latest.csv
+              echo "OK 200 — saved: $OUT and updated telemetry/alldata-latest.csv"
+              break
+            elif [[ "$HTTP" == "304" ]]; then
+              echo "Not modified (ETag) — skipping new file."
+              rm -f "$OUT.part"
+              break
+            else
+              rm -f "$OUT.part"
+              if (( attempt >= max )); then
+                echo "HTTP $HTTP after $attempt attempts — giving up this run."
+                exit 0  # don’t fail the workflow; just no new data
+              fi
+              echo "HTTP $HTTP — retrying in ${delay}s (attempt $attempt/$max)…"
+              sleep "$delay"; delay=$((delay*2)); attempt=$((attempt+1))
+            fi
+          done
       - name: Commit
         run: |
           git config user.name "telemetry-fetch[bot]"
