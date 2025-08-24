@@ -1,0 +1,46 @@
+name: analyze-on-csv
+on:
+  push:
+    branches: [ main ]                 # adjust if your default branch differs
+    paths:
+      - 'telemetry/alldata-latest.csv' # only run when this file changes
+  workflow_dispatch:                   # allow manual runs too
+
+permissions:
+  contents: write
+
+concurrency:
+  group: analyze-json
+  cancel-in-progress: true
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1              # we only need the latest commit (which includes the new CSV)
+
+      - name: Sanity check CSV
+        shell: bash
+        run: |
+          test -f telemetry/alldata-latest.csv || (echo "CSV missing" && exit 1)
+          ls -lh telemetry/alldata-latest.csv
+          head -n 1 telemetry/alldata-latest.csv
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run analysis
+        run: python -m analysis.run
+
+      - name: Commit outputs
+        shell: bash
+        run: |
+          git config user.name "analysis-bot"
+          git config user.email "analysis-bot@users.noreply.github.com"
+          git add public/teams
+          git commit -m "analysis $(date -u +%FT%TZ)" || echo "nothing to commit"
+          git push

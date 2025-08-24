@@ -56,48 +56,38 @@
           <span class="k">Auto-refresh every 60s</span>
         </div>
       </footer>
+
+      <hr style="margin:2rem 0;border:none;border-top:1px solid #e2e8f0"/>
+
+      <section>
+        <h2 style="margin:.25rem 0 1rem 0; font-size:1.25rem;">Scrubber Leaderboard (every 5 minutes)</h2>
+        <p class="subtitle">Only showing <code>Challenger</code> class teams. Pick a time; we compute each team’s cumulative distance up to the <em>closest</em> sample to that time and rank them.</p>
+
+        <div style="display:grid; gap:1rem; grid-template-columns: 1fr;">
+          <div>
+            <label class="k">Time</label>
+            <div style="display:flex; align-items:center; gap:1rem;">
+              <input id="scrubber" type="range" min="0" max="100" value="0" step="300000" style="width:100%" />
+              <div class="v" id="scrubTime">—</div>
+            </div>
+          </div>
+
+          <div class="tile">
+            <div class="k">Current leader (team key)</div>
+            <div class="v" id="leaderKey">—</div>
+          </div>
+
+          <div class="tile">
+            <div class="k">Standings by distance (km)</div>
+            <ol id="leaderboard" style="margin:.5rem 0 0 1.25rem;"></ol>
+          </div>
+        </div>
+      </section>
     </main>
 
-    <script>
-      const csvUrl = "telemetry/alldata-latest.csv"; // served by GitHub Pages after fetch workflow
-
-      function fmtMB(bytes) { return (bytes / (1024*1024)).toFixed(2); }
-
-      async function refresh() {
-        const btn = document.getElementById('btnRefresh');
-        btn.disabled = true;
-        const statusEl = document.getElementById('status');
-        try {
-          statusEl.textContent = 'fetching…';
-          const res = await fetch(csvUrl, { cache: "no-store" });
-          if (!res.ok) throw new Error("HTTP " + res.status);
-
-          const blob = await res.blob();
-          const sizeBytes = blob.size;
-          document.getElementById('csvSize').textContent = fmtMB(sizeBytes);
-
-          const text = await blob.text();
-          const lines = text.trim().split(/\r?\n/);
-          const rowCount = lines.length - 1; // minus header
-          document.getElementById('rowCount').textContent = rowCount;
-
-          // last updated = fetch time (UTC)
-          document.getElementById('lastUpdated').textContent = new Date().toISOString();
-
-          statusEl.textContent = 'live';
-          statusEl.className = 'v ok';
-        } catch (err) {
-          console.error(err);
-          statusEl.textContent = 'error';
-          statusEl.className = 'v err';
-        } finally {
-          btn.disabled = false;
-        }
-      }
-
-      refresh();
-      document.getElementById('btnRefresh').addEventListener('click', refresh);
-      setInterval(refresh, 60_000);
+    <script type="module">
+      import './assets/dashboard.js';
+      import './assets/scrubber.js';
     </script>
   </body>
 </html>
