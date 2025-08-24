@@ -10,20 +10,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Fetch CSV (grabbag, retries, ETag)
+      - name: Fetch latest CSV (no snapshots, retries, ETag)
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p telemetry
 
           URL="https://telemetry.worldsolarchallenge.org/grabbag/alldata.csv"
-          TS=$(date -u +%FT%TZ | tr ':' '-')
-          OUT="telemetry/alldata-$TS.csv"
-
-          # Use ETag so we only commit if the file actually changed
+          OUT="telemetry/alldata-latest.csv"
           ETAG_FILE="telemetry/.alldata.etag"
 
-          echo "Fetching $URL"
+          echo "Fetching $URL → $OUT"
           attempt=1; max=8; delay=1
           while :; do
             HTTP=$(curl -sS -L -w '%{http_code}' -o "$OUT.part" \
@@ -34,21 +31,20 @@ jobs:
               "$URL" || true)
 
             if [[ "$HTTP" == "200" ]]; then
-              # basic sanity: CSV header should contain 'time' and 'latitude'
-              head -n 1 "$OUT.part" | grep -qiE 'time,.*lat|latitude' || { echo "Header check failed"; rm -f "$OUT.part"; exit 0; }
+              # sanity check: must look like a CSV with time + lat headers
+              head -n1 "$OUT.part" | grep -qiE 'time,.*(lat|latitude)' || { echo "Header check failed"; rm -f "$OUT.part"; exit 0; }
               mv "$OUT.part" "$OUT"
-              cp "$OUT" telemetry/alldata-latest.csv
-              echo "OK 200 — saved: $OUT and updated telemetry/alldata-latest.csv"
+              echo "OK 200 — updated $OUT"
               break
             elif [[ "$HTTP" == "304" ]]; then
-              echo "Not modified (ETag) — skipping new file."
+              echo "Not modified (ETag) — keeping existing $OUT"
               rm -f "$OUT.part"
               break
             else
               rm -f "$OUT.part"
               if (( attempt >= max )); then
-                echo "HTTP $HTTP after $attempt attempts — giving up this run."
-                exit 0  # don’t fail the workflow; just no new data
+                echo "HTTP $HTTP after $attempt attempts — giving up this run (no new data)."
+                exit 0
               fi
               echo "HTTP $HTTP — retrying in ${delay}s (attempt $attempt/$max)…"
               sleep "$delay"; delay=$((delay*2)); attempt=$((attempt+1))

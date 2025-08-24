@@ -30,19 +30,19 @@
   <body>
     <main class="card">
       <h1>BWSC Data Logger — Dashboard</h1>
-      <p class="subtitle">Live snapshot from this repository’s <code>data/</code> folder.</p>
+      <p class="subtitle">Live snapshot of the <code>alldata-latest.csv</code> from telemetry.</p>
       <section class="grid">
         <div class="tile">
-          <div class="k">Fetched this many times</div>
-          <div class="v" id="fetchCount">—</div>
+          <div class="k">Data points in CSV</div>
+          <div class="v" id="rowCount">—</div>
         </div>
         <div class="tile">
-          <div class="k">Total data gathered (MB)</div>
-          <div class="v" id="totalMB">—</div>
+          <div class="k">Current CSV size (MB)</div>
+          <div class="v" id="csvSize">—</div>
         </div>
         <div class="tile">
-          <div class="k">Latest snapshot (UTC)</div>
-          <div class="v" id="latestTs">—</div>
+          <div class="k">Last updated (UTC)</div>
+          <div class="v" id="lastUpdated">—</div>
         </div>
         <div class="tile">
           <div class="k">Status</div>
@@ -59,69 +59,33 @@
     </main>
 
     <script>
-      // Derive owner/repo from GitHub Pages URL: https://OWNER.github.io/REPO/
-      function deriveRepoFromURL() {
-        const host = location.hostname; // e.g. username.github.io
-        const path = location.pathname.replace(/^\/+/, ''); // e.g. REPO/...
-        const owner = host.split('.')[0];
-        const repo = path.split('/')[0] || '';
-        return { owner, repo };
-      }
+      const csvUrl = "telemetry/alldata-latest.csv"; // served by GitHub Pages after fetch workflow
 
-      async function listDir(owner, repo, path, page=1) {
-        const per_page = 100;
-        const url = `https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(path)}?per_page=${per_page}&page=${page}`;
-        const res = await fetch(url, { headers: { 'Accept': 'application/vnd.github.v3+json' } });
-        if (res.status === 404) return []; // dir may not exist yet
-        if (!res.ok) throw new Error(`HTTP ${res.status} on ${path}`);
-        const data = await res.json();
-        // pagination: GitHub returns max 100 items; if exactly 100, try next page
-        if (Array.isArray(data) && data.length === per_page) {
-          const next = await listDir(owner, repo, path, page+1);
-          return data.concat(next);
-        }
-        return Array.isArray(data) ? data : [];
-      }
-
-      function fmtMB(bytes) {
-        return (bytes / (1024*1024)).toFixed(2);
-      }
-
-      function tsFromFilename(name) {
-        // expects raw filenames like 2025-08-24T09-15-00Z.kml
-        const m = name.match(/(\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}Z)\.kml$/);
-        return m ? m[1].replace(/-/g, (c, i) => (i===13||i===16?':':c)).replace('T', 'T').replace(/(?<=\d{2}):(?=\d{2}Z$)/,'') : null;
-      }
+      function fmtMB(bytes) { return (bytes / (1024*1024)).toFixed(2); }
 
       async function refresh() {
         const btn = document.getElementById('btnRefresh');
         btn.disabled = true;
-        const { owner, repo } = deriveRepoFromURL();
         const statusEl = document.getElementById('status');
         try {
           statusEl.textContent = 'fetching…';
-          const dataDir = await listDir(owner, repo, 'data');
-          // Sum NDJSON sizes
-          const ndjsonFiles = dataDir.filter(x => x.type === 'file' && x.name.startsWith('day-') && x.name.endsWith('.ndjson'));
-          const ndjsonBytes = ndjsonFiles.reduce((s,f)=> s + (f.size||0), 0);
+          const res = await fetch(csvUrl, { cache: "no-store" });
+          if (!res.ok) throw new Error("HTTP " + res.status);
 
-          // Raw snapshots in data/raw
-          const rawEntries = await listDir(owner, repo, 'data/raw');
-          const rawFiles = rawEntries.filter(x => x.type === 'file' && x.name.endsWith('.kml'));
-          const rawBytes = rawFiles.reduce((s,f)=> s + (f.size||0), 0);
+          const blob = await res.blob();
+          const sizeBytes = blob.size;
+          document.getElementById('csvSize').textContent = fmtMB(sizeBytes);
 
-          const totalFiles = rawFiles.length; // one file per fetch → your fetch count
-          const totalBytes = rawBytes + ndjsonBytes;
+          const text = await blob.text();
+          const lines = text.trim().split(/\r?\n/);
+          const rowCount = lines.length - 1; // minus header
+          document.getElementById('rowCount').textContent = rowCount;
 
-          // latest timestamp from newest raw filename (lexicographic often works, but sort just in case)
-          rawFiles.sort((a,b)=> a.name.localeCompare(b.name));
-          const latest = rawFiles.length ? tsFromFilename(rawFiles[rawFiles.length-1].name) : null;
+          // last updated = fetch time (UTC)
+          document.getElementById('lastUpdated').textContent = new Date().toISOString();
 
-          document.getElementById('fetchCount').textContent = String(totalFiles);
-          document.getElementById('totalMB').textContent = fmtMB(totalBytes);
-          document.getElementById('latestTs').textContent = latest || '—';
-          statusEl.textContent = totalFiles > 0 ? 'live' : 'waiting';
-          statusEl.className = totalFiles > 0 ? 'v ok' : 'v warn';
+          statusEl.textContent = 'live';
+          statusEl.className = 'v ok';
         } catch (err) {
           console.error(err);
           statusEl.textContent = 'error';
@@ -131,7 +95,6 @@
         }
       }
 
-      // first load and periodic refresh
       refresh();
       document.getElementById('btnRefresh').addEventListener('click', refresh);
       setInterval(refresh, 60_000);
