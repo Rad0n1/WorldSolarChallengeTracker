@@ -1,25 +1,26 @@
-name: log-kml
+name: fetch-alldata
 on:
   schedule:
-    - cron: "*/5 * * * *"  # every 5 minutes (UTC)
+    - cron: "*/5 * * * *"   # every 5 minutes UTC
   workflow_dispatch:
 permissions:
   contents: write
 jobs:
-  log:
+  fetch:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: "npm"
-      - run: npm ci || npm i
-      - run: node logger.mjs
-      - name: Commit snapshots
+      - name: Fetch CSV
         run: |
-          git config user.name "kml-logger[bot]"
-          git config user.email "kml-logger@users.noreply.github.com"
+          mkdir -p telemetry
+          TS=$(date -u +%FT%TZ | tr ':' '-')
+          curl -fsSL https://telemetry.worldsolarchallenge.org/alldata.csv -o telemetry/alldata-$TS.csv
+          # keep a rolling symlink-like copy for your homepage if you want:
+          cp telemetry/alldata-$TS.csv telemetry/alldata-latest.csv
+      - name: Commit
+        run: |
+          git config user.name "telemetry-fetch[bot]"
+          git config user.email "telemetry-fetch@users.noreply.github.com"
           git add -A
-          git commit -m "snapshot $(date -u +%FT%TZ)" || echo "nothing to commit"
+          git commit -m "alldata snapshot $TS" || echo "nothing to commit"
           git push
