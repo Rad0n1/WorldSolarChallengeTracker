@@ -3,197 +3,52 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>BWSC Tiny Tracker — Top Dutch #06</title>
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-      integrity="sha512-sA+e2HdQjH7tZ9r3D5kK8mQw1MTpPx3Oa7cBz0m0T8v2F9+Xl0n7i4dCq8dQp0R+eJb0mGj6QJ5Vq8JEkC0F1Q=="
-      crossorigin=""
-    />
+    <title>BWSC Data Logger — Dashboard</title>
     <style>
-      html, body { height: 100%; margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; }
-      #app { display: grid; grid-template-rows: auto 1fr; height: 100%; }
-      header { padding: .6rem .9rem; background: #0a0a0a; color: #fff; display: flex; gap: .8rem; align-items: center; flex-wrap: wrap; }
-      header h1 { font-size: 1rem; margin: 0; font-weight: 600; }
-      header .pill { background:#1f2937; padding:.2rem .5rem; border-radius:999px; font-size:.8rem; }
-      header .controls { margin-left:auto; display:flex; gap:.6rem; align-items:center; }
-      #map { width: 100%; height: 100%; }
-      .legend { position:absolute; bottom:12px; left:12px; background:#fff; padding:.6rem .7rem; border-radius:.6rem; box-shadow:0 4px 16px rgba(0,0,0,.15); font-size:.9rem; line-height:1.35; max-width: 320px; }
-      .legend b { font-weight: 600; }
-      .legend .ts { color:#555; font-variant-numeric: tabular-nums; }
-      .note { font-size:.8rem; color:#6b7280; margin-top:.4rem; }
-      .tdsr { color:#2563eb; font-weight:600; }
+      body { margin:0; font-family: system-ui, sans-serif; background: linear-gradient(160deg, #e0f2fe, #f0fdfa); color:#0f172a; display:flex; align-items:center; justify-content:center; height:100vh; }
+      .card { background:#fff; border-radius:1rem; box-shadow:0 6px 24px rgba(0,0,0,.1); padding:2rem 3rem; max-width:480px; text-align:center; }
+      h1 { font-size:1.6rem; margin-bottom:1rem; }
+      .stat { font-size:1.2rem; margin:.6rem 0; }
+      .note { margin-top:1.5rem; font-size:.9rem; color:#475569; }
     </style>
   </head>
   <body>
-    <div id="app">
-      <header>
-        <h1>BWSC Tiny Tracker</h1>
-        <span class="pill">Team focus: <span class="tdsr">Top Dutch #06</span></span>
-        <div class="controls">
-          <label><input id="showAll" type="checkbox" checked> Show all teams</label>
-          <label><input id="followTDSR" type="checkbox" checked> Follow Top Dutch</label>
-          <span id="status" class="pill">loading…</span>
-        </div>
-      </header>
-      <div id="map"></div>
-    </div>
-
-    <div class="legend" id="legend">
-      <div><b>Status:</b> <span id="netStatus">—</span></div>
-      <div><b>Last refresh:</b> <span id="lastRefresh" class="ts">—</span></div>
-      <div><b>Feed:</b> <code id="feedName">latest.kml</code></div>
-      <div class="note">• Positions refresh ≈ every 2.5 minutes while moving (not all teams simultaneously). Use this for location, not official order.
+    <div class="card">
+      <h1>BWSC Data Logger</h1>
+      <div id="stats">
+        <div class="stat">Fetched <span id="count">—</span> times</div>
+        <div class="stat"><span id="mb">—</span> MB of data gathered</div>
       </div>
+      <div class="note">Analysis is currently WIP. Stand by…</div>
     </div>
-
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-      integrity="sha512-o9N1j7kGStl7QfO3K0dFWmQpQ4H2gF0y8gq8Yj2O3b5kZxG0bD3o2JgQF1GQ7mQvS5EJm6zYJvFQmQ/5O3G1hA=="
-      crossorigin=""></script>
 
     <script>
-      // === Configuration ===
-      // Direct KML feed (may be CORS-protected in browsers):
-      const DIRECT_KML = 'https://telemetry.worldsolarchallenge.org/wscearth/latest.kml';
-      // Optional: your own tiny proxy to bypass CORS (uncomment and set URL):
-      // const PROXY = 'https://YOUR-DEPLOYMENT.example.com/api/kml?url=';
-      const PROXY = '';
-      const FEED_URL = (PROXY ? PROXY + encodeURIComponent(DIRECT_KML) : DIRECT_KML);
-
-      const POLL_MS = 150000; // 2.5 min, aligned with BWSC tracker cadence
-      const TEAM_FOCUS_NAME = 'Top Dutch'; // fuzzy match on Placemark name
-
-      // === Map ===
-      const map = L.map('map', { zoomControl: true }).setView([-23.7, 133.87], 5); // Central AUS
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 18,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      }).addTo(map);
-
-      const markers = new Map();
-      let followTDSR = true;
-
-      // UI elements
-      const $status = document.getElementById('status');
-      const $netStatus = document.getElementById('netStatus');
-      const $lastRefresh = document.getElementById('lastRefresh');
-      const $feedName = document.getElementById('feedName');
-      const $showAll = document.getElementById('showAll');
-      const $followT = document.getElementById('followTDSR');
-
-      $feedName.textContent = PROXY ? 'proxy→latest.kml' : 'latest.kml';
-      $showAll.addEventListener('change', () => rerenderVisibility());
-      $followT.addEventListener('change', () => { followTDSR = $followT.checked; });
-
-      function humanTime(ts = Date.now()) {
-        const d = new Date(ts);
-        return d.toLocaleString([], { hour12: false });
-      }
-
-      async function fetchKML(url) {
-        $netStatus.textContent = 'fetching…';
-        const t0 = performance.now();
+      async function getStats() {
+        let count = 0, bytes = 0;
         try {
-          const res = await fetch(url, { cache: 'no-store' });
-          if (!res.ok) throw new Error('HTTP ' + res.status);
+          const res = await fetch('./data/');
+          if (!res.ok) throw new Error('no dir listing');
           const text = await res.text();
-          const dt = (performance.now() - t0).toFixed(0);
-          $netStatus.textContent = `ok (${dt}ms)`;
-          return text;
-        } catch (err) {
-          $netStatus.textContent = 'error';
-          console.error(err);
-          throw err;
+          // NOTE: GitHub Pages doesn’t serve dir listings. This is placeholder.
+        } catch(e) {
+          // fallback: estimate from NDJSON file if present
+          try {
+            const today = new Date().toISOString().slice(0,10);
+            const file = `data/day-${today}.ndjson`;
+            const r = await fetch(file);
+            if (r.ok) {
+              const blob = await r.blob();
+              bytes = blob.size;
+              const txt = await r.text();
+              count = txt.trim().split("\n").length;
+            }
+          } catch {}
         }
+        document.getElementById('count').textContent = count || '0';
+        document.getElementById('mb').textContent = (bytes/1024/1024).toFixed(2);
       }
 
-      function parseKMLtoTeams(kmlText) {
-        const doc = new DOMParser().parseFromString(kmlText, 'application/xml');
-        const placemarks = Array.from(doc.getElementsByTagName('Placemark'));
-        const teams = [];
-        for (const pm of placemarks) {
-          const name = pm.getElementsByTagName('name')[0]?.textContent?.trim() || '';
-          const coordText = pm.querySelector('Point > coordinates')?.textContent?.trim();
-          if (!coordText) continue;
-          const [lonStr, latStr] = coordText.split(',');
-          const lon = parseFloat(lonStr), lat = parseFloat(latStr);
-          if (!isFinite(lat) || !isFinite(lon)) continue;
-          const desc = pm.getElementsByTagName('description')[0]?.textContent || '';
-          teams.push({ name, lat, lon, desc });
-        }
-        return teams;
-      }
-
-      function upsertMarker(team) {
-        const key = team.name;
-        const showAll = $showAll.checked;
-        const isFocus = team.name.toLowerCase().includes(TEAM_FOCUS_NAME.toLowerCase());
-
-        let m = markers.get(key);
-        const html = `<b>${team.name}</b><br/>${team.desc ? team.desc : ''}<br/><small>${team.lat.toFixed(5)}, ${team.lon.toFixed(5)}</small>`;
-
-        const icon = L.divIcon({
-          className: 'team-marker',
-          html: `<div style="background:${isFocus ? '#f59e0b' : '#2563eb'};color:#fff;padding:4px 6px;border-radius:999px;font-size:12px;box-shadow:0 2px 8px rgba(0,0,0,.25);white-space:nowrap;">${team.name}</div>`,
-          iconSize: [0, 0],
-          iconAnchor: [0, 0]
-        });
-
-        if (!m) {
-          m = L.marker([team.lat, team.lon], { icon }).bindPopup(html);
-          markers.set(key, m);
-          m.addTo(map);
-        } else {
-          m.setLatLng([team.lat, team.lon]);
-          m.setIcon(icon);
-          m.setPopupContent(html);
-        }
-
-        // visibility
-        if (!showAll && !isFocus) {
-          if (map.hasLayer(m)) map.removeLayer(m);
-        } else {
-          if (!map.hasLayer(m)) m.addTo(map);
-        }
-
-        return { marker: m, isFocus };
-      }
-
-      function rerenderVisibility() {
-        const showAll = $showAll.checked;
-        for (const [name, m] of markers) {
-          const isFocus = name.toLowerCase().includes(TEAM_FOCUS_NAME.toLowerCase());
-          if (!showAll && !isFocus) {
-            if (map.hasLayer(m)) map.removeLayer(m);
-          } else {
-            if (!map.hasLayer(m)) m.addTo(map);
-          }
-        }
-      }
-
-      async function refresh() {
-        $status.textContent = 'updating…';
-        try {
-          const kml = await fetchKML(FEED_URL);
-          const teams = parseKMLtoTeams(kml);
-          let focusLatLng = null;
-          for (const team of teams) {
-            const { marker, isFocus } = upsertMarker(team);
-            if (isFocus) focusLatLng = marker.getLatLng();
-          }
-          // follow Top Dutch if requested
-          if (followTDSR && focusLatLng) {
-            map.setView(focusLatLng, Math.max(map.getZoom(), 6), { animate: true });
-          }
-          $lastRefresh.textContent = humanTime();
-          $status.textContent = 'live';
-        } catch (err) {
-          $status.textContent = 'error';
-        }
-      }
-
-      refresh();
-      setInterval(refresh, POLL_MS);
+      getStats();
     </script>
   </body>
 </html>
