@@ -5,50 +5,136 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>BWSC Data Logger — Dashboard</title>
     <style>
-      body { margin:0; font-family: system-ui, sans-serif; background: linear-gradient(160deg, #e0f2fe, #f0fdfa); color:#0f172a; display:flex; align-items:center; justify-content:center; height:100vh; }
-      .card { background:#fff; border-radius:1rem; box-shadow:0 6px 24px rgba(0,0,0,.1); padding:2rem 3rem; max-width:480px; text-align:center; }
-      h1 { font-size:1.6rem; margin-bottom:1rem; }
-      .stat { font-size:1.2rem; margin:.6rem 0; }
-      .note { margin-top:1.5rem; font-size:.9rem; color:#475569; }
+      :root { --fg:#0f172a; --muted:#64748b; --card:#ffffff; --bg1:#e0f2fe; --bg2:#f0fdfa; }
+      html, body { height:100%; }
+      body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans"; color:var(--fg);
+             background: radial-gradient(1200px 800px at 20% 10%, var(--bg1), transparent),
+                         radial-gradient(1200px 800px at 80% 90%, var(--bg2), #ffffff);
+             display:flex; align-items:center; justify-content:center; }
+      .card { background:var(--card); border-radius:18px; box-shadow:0 10px 30px rgba(2,6,23,.12); padding:2.2rem 2.4rem; width:min(720px, 92vw); }
+      h1 { margin:0 0 .75rem 0; font-size:1.6rem; letter-spacing:.2px; }
+      p.subtitle { margin:.25rem 0 1.25rem 0; color:var(--muted); }
+      .grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap:1rem; }
+      .tile { border:1px solid #e2e8f0; border-radius:14px; padding:1rem 1.1rem; }
+      .k { font-size:.9rem; color:var(--muted); }
+      .v { font-size:1.6rem; font-variant-numeric: tabular-nums; margin-top:.15rem; }
+      .ok { color:#16a34a; }
+      .warn { color:#ca8a04; }
+      .err { color:#dc2626; }
+      footer { margin-top:1rem; color:var(--muted); font-size:.9rem; display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; }
+      code { background:#f1f5f9; padding:.1rem .35rem; border-radius:6px; }
+      button.refresh { border:none; background:#0ea5e9; color:#fff; padding:.5rem .8rem; border-radius:10px; cursor:pointer; box-shadow:0 4px 14px rgba(14,165,233,.35); }
+      button.refresh:disabled { opacity:.6; cursor:default; }
     </style>
   </head>
   <body>
-    <div class="card">
-      <h1>BWSC Data Logger</h1>
-      <div id="stats">
-        <div class="stat">Fetched <span id="count">—</span> times</div>
-        <div class="stat"><span id="mb">—</span> MB of data gathered</div>
-      </div>
-      <div class="note">Analysis is currently WIP. Stand by…</div>
-    </div>
+    <main class="card">
+      <h1>BWSC Data Logger — Dashboard</h1>
+      <p class="subtitle">Live snapshot from this repository’s <code>data/</code> folder.</p>
+      <section class="grid">
+        <div class="tile">
+          <div class="k">Fetched this many times</div>
+          <div class="v" id="fetchCount">—</div>
+        </div>
+        <div class="tile">
+          <div class="k">Total data gathered (MB)</div>
+          <div class="v" id="totalMB">—</div>
+        </div>
+        <div class="tile">
+          <div class="k">Latest snapshot (UTC)</div>
+          <div class="v" id="latestTs">—</div>
+        </div>
+        <div class="tile">
+          <div class="k">Status</div>
+          <div class="v" id="status">checking…</div>
+        </div>
+      </section>
+      <footer>
+        <div>Analysis is currently WIP. Stand by…</div>
+        <div>
+          <button class="refresh" id="btnRefresh">Refresh now</button>
+          <span class="k">Auto-refresh every 60s</span>
+        </div>
+      </footer>
+    </main>
 
     <script>
-      async function getStats() {
-        let count = 0, bytes = 0;
-        try {
-          const res = await fetch('./data/');
-          if (!res.ok) throw new Error('no dir listing');
-          const text = await res.text();
-          // NOTE: GitHub Pages doesn’t serve dir listings. This is placeholder.
-        } catch(e) {
-          // fallback: estimate from NDJSON file if present
-          try {
-            const today = new Date().toISOString().slice(0,10);
-            const file = `data/day-${today}.ndjson`;
-            const r = await fetch(file);
-            if (r.ok) {
-              const blob = await r.blob();
-              bytes = blob.size;
-              const txt = await r.text();
-              count = txt.trim().split("\n").length;
-            }
-          } catch {}
-        }
-        document.getElementById('count').textContent = count || '0';
-        document.getElementById('mb').textContent = (bytes/1024/1024).toFixed(2);
+      // Derive owner/repo from GitHub Pages URL: https://OWNER.github.io/REPO/
+      function deriveRepoFromURL() {
+        const host = location.hostname; // e.g. username.github.io
+        const path = location.pathname.replace(/^\/+/, ''); // e.g. REPO/...
+        const owner = host.split('.')[0];
+        const repo = path.split('/')[0] || '';
+        return { owner, repo };
       }
 
-      getStats();
+      async function listDir(owner, repo, path, page=1) {
+        const per_page = 100;
+        const url = `https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(path)}?per_page=${per_page}&page=${page}`;
+        const res = await fetch(url, { headers: { 'Accept': 'application/vnd.github.v3+json' } });
+        if (res.status === 404) return []; // dir may not exist yet
+        if (!res.ok) throw new Error(`HTTP ${res.status} on ${path}`);
+        const data = await res.json();
+        // pagination: GitHub returns max 100 items; if exactly 100, try next page
+        if (Array.isArray(data) && data.length === per_page) {
+          const next = await listDir(owner, repo, path, page+1);
+          return data.concat(next);
+        }
+        return Array.isArray(data) ? data : [];
+      }
+
+      function fmtMB(bytes) {
+        return (bytes / (1024*1024)).toFixed(2);
+      }
+
+      function tsFromFilename(name) {
+        // expects raw filenames like 2025-08-24T09-15-00Z.kml
+        const m = name.match(/(\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}Z)\.kml$/);
+        return m ? m[1].replace(/-/g, (c, i) => (i===13||i===16?':':c)).replace('T', 'T').replace(/(?<=\d{2}):(?=\d{2}Z$)/,'') : null;
+      }
+
+      async function refresh() {
+        const btn = document.getElementById('btnRefresh');
+        btn.disabled = true;
+        const { owner, repo } = deriveRepoFromURL();
+        const statusEl = document.getElementById('status');
+        try {
+          statusEl.textContent = 'fetching…';
+          const dataDir = await listDir(owner, repo, 'data');
+          // Sum NDJSON sizes
+          const ndjsonFiles = dataDir.filter(x => x.type === 'file' && x.name.startsWith('day-') && x.name.endsWith('.ndjson'));
+          const ndjsonBytes = ndjsonFiles.reduce((s,f)=> s + (f.size||0), 0);
+
+          // Raw snapshots in data/raw
+          const rawEntries = await listDir(owner, repo, 'data/raw');
+          const rawFiles = rawEntries.filter(x => x.type === 'file' && x.name.endsWith('.kml'));
+          const rawBytes = rawFiles.reduce((s,f)=> s + (f.size||0), 0);
+
+          const totalFiles = rawFiles.length; // one file per fetch → your fetch count
+          const totalBytes = rawBytes + ndjsonBytes;
+
+          // latest timestamp from newest raw filename (lexicographic often works, but sort just in case)
+          rawFiles.sort((a,b)=> a.name.localeCompare(b.name));
+          const latest = rawFiles.length ? tsFromFilename(rawFiles[rawFiles.length-1].name) : null;
+
+          document.getElementById('fetchCount').textContent = String(totalFiles);
+          document.getElementById('totalMB').textContent = fmtMB(totalBytes);
+          document.getElementById('latestTs').textContent = latest || '—';
+          statusEl.textContent = totalFiles > 0 ? 'live' : 'waiting';
+          statusEl.className = totalFiles > 0 ? 'v ok' : 'v warn';
+        } catch (err) {
+          console.error(err);
+          statusEl.textContent = 'error';
+          statusEl.className = 'v err';
+        } finally {
+          btn.disabled = false;
+        }
+      }
+
+      // first load and periodic refresh
+      refresh();
+      document.getElementById('btnRefresh').addEventListener('click', refresh);
+      setInterval(refresh, 60_000);
     </script>
   </body>
 </html>
