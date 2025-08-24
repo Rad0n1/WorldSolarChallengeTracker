@@ -1,5 +1,24 @@
 {
   "name": "bwsc-kml-logger",
   "type": "module",
-  "dependencies": { "xml2js": "^0.6.2" }
+  "dependencies": {
+    "xml2js": "^0.6.2"
+  },
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rad0n1/WorldSolarChallengeTracker.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Rad0n1/WorldSolarChallengeTracker/issues"
+  },
+  "homepage": "https://github.com/Rad0n1/WorldSolarChallengeTracker#readme",
+  "description": ""
 }
