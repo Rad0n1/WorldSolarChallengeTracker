@@ -14,7 +14,7 @@ jobs:
         run: |
           mkdir -p telemetry
           TS=$(date -u +%FT%TZ | tr ':' '-')
-          curl -fsSL https://telemetry.worldsolarchallenge.org/alldata.csv -o telemetry/alldata-$TS.csv
+          curl -fsSL https://telemetry.worldsolarchallenge.org/grabbag/alldata.csv -o telemetry/alldata-$TS.csv
           # keep a rolling symlink-like copy for your homepage if you want:
           cp telemetry/alldata-$TS.csv telemetry/alldata-latest.csv
       - name: Commit
