@@ -1,0 +1,765 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">
+    <Document id="1">
+        <Folder id="2">
+            <Style id="5">
+                <IconStyle id="6">
+                    <colorMode>normal</colorMode>
+                    <scale>2.0</scale>
+                    <heading>0</heading>
+                    <Icon id="7">
+                        <href>https://maps.google.com/mapfiles/kml/paddle/grn-blank.png</href>
+                    </Icon>
+                    <hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
+                </IconStyle>
+            </Style>
+            <Style id="16">
+                <IconStyle id="17">
+                    <colorMode>normal</colorMode>
+                    <scale>2.0</scale>
+                    <heading>0</heading>
+                    <Icon id="18">
+                        <href>https://maps.google.com/mapfiles/kml/paddle/grn-blank.png</href>
+                    </Icon>
+                    <hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
+                </IconStyle>
+            </Style>
+            <Style id="21">
+                <IconStyle id="22">
+                    <colorMode>normal</colorMode>
+                    <scale>2.0</scale>
+                    <heading>0</heading>
+                    <Icon id="23">
+                        <href>https://maps.google.com/mapfiles/kml/paddle/grn-blank.png</href>
+                    </Icon>
+                    <hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
+                </IconStyle>
+            </Style>
+            <Style id="26">
+                <IconStyle id="27">
+                    <colorMode>normal</colorMode>
+                    <scale>2.0</scale>
+                    <heading>0</heading>
+                    <Icon id="28">
+                        <href>https://maps.google.com/mapfiles/kml/paddle/grn-blank.png</href>
+                    </Icon>
+                    <hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
+                </IconStyle>
+            </Style>
+            <Style id="31">
+                <IconStyle id="32">
+                    <colorMode>normal</colorMode>
+                    <scale>2.0</scale>
+                    <heading>0</heading>
+                    <Icon id="33">
+                        <href>https://maps.google.com/mapfiles/kml/paddle/grn-blank.png</href>
+                    </Icon>
+                    <hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
+                </IconStyle>
+            </Style>
+            <Style id="47">
+                <IconStyle id="48">
+                    <colorMode>normal</colorMode>
+                    <scale>2.0</scale>
+                    <heading>0</heading>
+                    <Icon id="49">
+                        <href>https://maps.google.com/mapfiles/kml/paddle/grn-blank.png</href>
+                    </Icon>
+                    <hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
+                </IconStyle>
+            </Style>
+            <Style id="52">
+                <IconStyle id="53">
+                    <colorMode>normal</colorMode>
+                    <scale>2.0</scale>
+                    <heading>0</heading>
+                    <Icon id="54">
+                        <href>https://maps.google.com/mapfiles/kml/paddle/grn-blank.png</href>
+                    </Icon>
+                    <hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
+                </IconStyle>
+            </Style>
+            <Style id="57">
+                <IconStyle id="58">
+                    <colorMode>normal</colorMode>
+                    <scale>2.0</scale>
+                    <heading>0</heading>
+                    <Icon id="59">
+                        <href>https://maps.google.com/mapfiles/kml/paddle/grn-blank.png</href>
+                    </Icon>
+                    <hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
+                </IconStyle>
+            </Style>
+            <Style id="67">
+                <IconStyle id="68">
+                    <colorMode>normal</colorMode>
+                    <scale>2.0</scale>
+                    <heading>0</heading>
+                    <Icon id="69">
+                        <href>https://maps.google.com/mapfiles/kml/paddle/grn-blank.png</href>
+                    </Icon>
+                    <hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
+                </IconStyle>
+            </Style>
+            <Style id="72">
+                <IconStyle id="73">
+                    <colorMode>normal</colorMode>
+                    <scale>2.0</scale>
+                    <heading>0</heading>
+                    <Icon id="74">
+                        <href>https://maps.google.com/mapfiles/kml/paddle/grn-blank.png</href>
+                    </Icon>
+                    <hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
+                </IconStyle>
+            </Style>
+            <Style id="77">
+                <IconStyle id="78">
+                    <colorMode>normal</colorMode>
+                    <scale>2.0</scale>
+                    <heading>0</heading>
+                    <Icon id="79">
+                        <href>https://maps.google.com/mapfiles/kml/paddle/grn-blank.png</href>
+                    </Icon>
+                    <hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
+                </IconStyle>
+            </Style>
+            <Style id="82">
+                <IconStyle id="83">
+                    <colorMode>normal</colorMode>
+                    <scale>2.0</scale>
+                    <heading>0</heading>
+                    <Icon id="84">
+                        <href>https://maps.google.com/mapfiles/kml/paddle/grn-blank.png</href>
+                    </Icon>
+                    <hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
+                </IconStyle>
+            </Style>
+            <Style id="87">
+                <IconStyle id="88">
+                    <colorMode>normal</colorMode>
+                    <scale>2.0</scale>
+                    <heading>0</heading>
+                    <Icon id="89">
+                        <href>https://maps.google.com/mapfiles/kml/paddle/grn-blank.png</href>
+                    </Icon>
+                    <hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
+                </IconStyle>
+            </Style>
+            <Style id="92">
+                <IconStyle id="93">
+                    <colorMode>normal</colorMode>
+                    <scale>2.0</scale>
+                    <heading>0</heading>
+                    <Icon id="94">
+                        <href>https://maps.google.com/mapfiles/kml/paddle/grn-blank.png</href>
+                    </Icon>
+                    <hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
+                </IconStyle>
+            </Style>
+            <Style id="97">
+                <IconStyle id="98">
+                    <colorMode>normal</colorMode>
+                    <scale>2.0</scale>
+                    <heading>0</heading>
+                    <Icon id="99">
+                        <href>https://maps.google.com/mapfiles/kml/paddle/grn-blank.png</href>
+                    </Icon>
+                    <hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
+                </IconStyle>
+            </Style>
+            <Style id="107">
+                <IconStyle id="108">
+                    <colorMode>normal</colorMode>
+                    <scale>2.0</scale>
+                    <heading>0</heading>
+                    <Icon id="109">
+                        <href>https://maps.google.com/mapfiles/kml/paddle/grn-blank.png</href>
+                    </Icon>
+                    <hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
+                </IconStyle>
+            </Style>
+            <Style id="112">
+                <IconStyle id="113">
+                    <colorMode>normal</colorMode>
+                    <scale>2.0</scale>
+                    <heading>0</heading>
+                    <Icon id="114">
+                        <href>https://maps.google.com/mapfiles/kml/paddle/grn-blank.png</href>
+                    </Icon>
+                    <hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
+                </IconStyle>
+            </Style>
+            <Style id="127">
+                <IconStyle id="128">
+                    <colorMode>normal</colorMode>
+                    <scale>2.0</scale>
+                    <heading>0</heading>
+                    <Icon id="129">
+                        <href>https://maps.google.com/mapfiles/kml/paddle/grn-blank.png</href>
+                    </Icon>
+                    <hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
+                </IconStyle>
+            </Style>
+            <Style id="132">
+                <IconStyle id="133">
+                    <colorMode>normal</colorMode>
+                    <scale>2.0</scale>
+                    <heading>0</heading>
+                    <Icon id="134">
+                        <href>https://maps.google.com/mapfiles/kml/paddle/grn-blank.png</href>
+                    </Icon>
+                    <hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
+                </IconStyle>
+            </Style>
+            <Style id="137">
+                <IconStyle id="138">
+                    <colorMode>normal</colorMode>
+                    <scale>2.0</scale>
+                    <heading>0</heading>
+                    <Icon id="139">
+                        <href>https://maps.google.com/mapfiles/kml/paddle/grn-blank.png</href>
+                    </Icon>
+                    <hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
+                </IconStyle>
+            </Style>
+            <Style id="142">
+                <IconStyle id="143">
+                    <colorMode>normal</colorMode>
+                    <scale>2.0</scale>
+                    <heading>0</heading>
+                    <Icon id="144">
+                        <href>https://maps.google.com/mapfiles/kml/paddle/grn-blank.png</href>
+                    </Icon>
+                    <hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
+                </IconStyle>
+            </Style>
+            <Style id="147">
+                <IconStyle id="148">
+                    <colorMode>normal</colorMode>
+                    <scale>2.0</scale>
+                    <heading>0</heading>
+                    <Icon id="149">
+                        <href>https://maps.google.com/mapfiles/kml/paddle/grn-blank.png</href>
+                    </Icon>
+                    <hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
+                </IconStyle>
+            </Style>
+            <Style id="152">
+                <IconStyle id="153">
+                    <colorMode>normal</colorMode>
+                    <scale>2.0</scale>
+                    <heading>0</heading>
+                    <Icon id="154">
+                        <href>https://maps.google.com/mapfiles/kml/paddle/grn-blank.png</href>
+                    </Icon>
+                    <hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
+                </IconStyle>
+            </Style>
+            <Style id="157">
+                <IconStyle id="158">
+                    <colorMode>normal</colorMode>
+                    <scale>2.0</scale>
+                    <heading>0</heading>
+                    <Icon id="159">
+                        <href>https://maps.google.com/mapfiles/kml/paddle/grn-blank.png</href>
+                    </Icon>
+                    <hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
+                </IconStyle>
+            </Style>
+            <Style id="162">
+                <IconStyle id="163">
+                    <colorMode>normal</colorMode>
+                    <scale>2.0</scale>
+                    <heading>0</heading>
+                    <Icon id="164">
+                        <href>https://maps.google.com/mapfiles/kml/paddle/grn-blank.png</href>
+                    </Icon>
+                    <hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
+                </IconStyle>
+            </Style>
+            <Style id="172">
+                <IconStyle id="173">
+                    <colorMode>normal</colorMode>
+                    <scale>2.0</scale>
+                    <heading>0</heading>
+                    <Icon id="174">
+                        <href>https://maps.google.com/mapfiles/kml/paddle/grn-blank.png</href>
+                    </Icon>
+                    <hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
+                </IconStyle>
+            </Style>
+            <name>Challenger</name>
+            <Placemark id="4">
+                <name>10 - Tokai</name>
+                <description>Speed: -0.1 km/h
+Driven: 632.4 km
+Last Update: 25.9 min ago
+</description>
+                <styleUrl>#5</styleUrl>
+                <Point id="3">
+                    <coordinates>133.41342,-16.68098,0.0</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="15">
+                <name>15 - Western Sydney</name>
+                <description>Speed: 0.0 km/h
+Driven: 632.3 km
+Last Update: 46.2 min ago
+</description>
+                <styleUrl>#16</styleUrl>
+                <Point id="14">
+                    <coordinates>133.41328,-16.68077,0.0</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="20">
+                <name>2 - Michigan</name>
+                <description>Speed: 0.0 km/h
+Driven: 632.2 km
+Last Update: 64.3 min ago
+</description>
+                <styleUrl>#21</styleUrl>
+                <Point id="19">
+                    <coordinates>133.41286,-16.67941,0.0</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="25">
+                <name>21 - Twente</name>
+                <description>Speed: 0.0 km/h
+Driven: 713.2 km
+Last Update: 134.2 min ago
+</description>
+                <styleUrl>#26</styleUrl>
+                <Point id="24">
+                    <coordinates>133.45076,-17.39864,0.0</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="30">
+                <name>23 - Halmstad</name>
+                <description>Speed: 74.4 km/h
+Driven: 505.2 km
+Last Update: 7.0 min ago
+</description>
+                <styleUrl>#31</styleUrl>
+                <Point id="29">
+                    <coordinates>133.26553,-15.64035,0.0</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="46">
+                <name>28 - AgniRath</name>
+                <description>Speed: 0.1 km/h
+Driven: 313.9 km
+Last Update: 9.5 min ago
+</description>
+                <styleUrl>#47</styleUrl>
+                <Point id="45">
+                    <coordinates>132.25449,-14.46037,0.0</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="51">
+                <name>3 - Brunel</name>
+                <description>Speed: -0.0 km/h
+Driven: 729.1 km
+Last Update: 44.2 min ago
+</description>
+                <styleUrl>#52</styleUrl>
+                <Point id="50">
+                    <coordinates>133.52525,-17.52289,0.0</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="56">
+                <name>32 - TUfast</name>
+                <description>Speed: -0.1 km/h
+Driven: 407.2 km
+Last Update: 135.4 min ago
+</description>
+                <styleUrl>#57</styleUrl>
+                <Point id="55">
+                    <coordinates>132.97427,-14.8394,0.0</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="66">
+                <name>38 - Iron Lions</name>
+                <description>Speed: -0.1 km/h
+Driven: 362.7 km
+Last Update: 124.0 min ago
+</description>
+                <styleUrl>#67</styleUrl>
+                <Point id="65">
+                    <coordinates>132.63361,-14.64458,0.0</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="71">
+                <name>41 - ANU</name>
+                <description>Speed: -0.0 km/h
+Driven: 322.0 km
+Last Update: 132.7 min ago
+</description>
+                <styleUrl>#72</styleUrl>
+                <Point id="70">
+                    <coordinates>132.32574,-14.48154,0.0</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="76">
+                <name>42 - SASVA</name>
+                <description>Speed: 7.5 km/h
+Driven: 314.8 km
+Last Update: 3.7 min ago
+</description>
+                <styleUrl>#77</styleUrl>
+                <Point id="75">
+                    <coordinates>132.26915,-14.45523,0.0</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="81">
+                <name>46 - JUST</name>
+                <description>Speed: -0.2 km/h
+Driven: 632.3 km
+Last Update: 34.8 min ago
+</description>
+                <styleUrl>#82</styleUrl>
+                <Point id="80">
+                    <coordinates>133.41307,-16.68095,0.0</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="86">
+                <name>48 - Neumann</name>
+                <description>Speed: -0.2 km/h
+Driven: 648.7 km
+Last Update: 43.0 min ago
+</description>
+                <styleUrl>#87</styleUrl>
+                <Point id="85">
+                    <coordinates>133.42822,-16.8268,0.0</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="91">
+                <name>51 - Chalmers</name>
+                <description>Speed: -0.0 km/h
+Driven: 559.5 km
+Last Update: 3.0 min ago
+</description>
+                <styleUrl>#92</styleUrl>
+                <Point id="90">
+                    <coordinates>133.4278,-16.06233,0.0</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="96">
+                <name>57 - SNU SOLO</name>
+                <description>Speed: 1.1 km/h
+Driven: 322.0 km
+Last Update: 129.1 min ago
+</description>
+                <styleUrl>#97</styleUrl>
+                <Point id="95">
+                    <coordinates>132.32553,-14.48143,0.0</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="106">
+                <name>6 - Top Dutch</name>
+                <description>Speed: -0.1 km/h
+Driven: 632.3 km
+Last Update: 28.3 min ago
+</description>
+                <styleUrl>#107</styleUrl>
+                <Point id="105">
+                    <coordinates>133.4138,-16.68033,0.0</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="111">
+                <name>61 - Wakayama</name>
+                <description>Speed: -0.0 km/h
+Driven: 535.3 km
+Last Update: 62.1 min ago
+</description>
+                <styleUrl>#112</styleUrl>
+                <Point id="110">
+                    <coordinates>133.40483,-15.86055,0.0</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="126">
+                <name>7 - Sonnenwagen</name>
+                <description>Speed: 0.1 km/h
+Driven: 659.0 km
+Last Update: 43.2 min ago
+</description>
+                <styleUrl>#127</styleUrl>
+                <Point id="125">
+                    <coordinates>133.42236,-16.92014,0.0</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="131">
+                <name>78 - Osaka</name>
+                <description>Speed: -0.0 km/h
+Driven: 495.7 km
+Last Update: 137.9 min ago
+</description>
+                <styleUrl>#132</styleUrl>
+                <Point id="130">
+                    <coordinates>133.21529,-15.57152,0.0</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="136">
+                <name>8 - Innoptus</name>
+                <description>Speed: -0.1 km/h
+Driven: 709.3 km
+Last Update: 41.7 min ago
+</description>
+                <styleUrl>#137</styleUrl>
+                <Point id="135">
+                    <coordinates>133.43771,-17.36639,0.0</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="141">
+                <name>82 - SNU</name>
+                <description>Speed: -0.1 km/h
+Driven: 407.4 km
+Last Update: 115.0 min ago
+</description>
+                <styleUrl>#142</styleUrl>
+                <Point id="140">
+                    <coordinates>132.976,-14.83969,0.0</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="146">
+                <name>85 - aCentauri</name>
+                <description>Speed: 0.2 km/h
+Driven: 632.3 km
+Last Update: 43.4 min ago
+</description>
+                <styleUrl>#147</styleUrl>
+                <Point id="145">
+                    <coordinates>133.41422,-16.68053,0.0</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="151">
+                <name>88 - Kogakuin</name>
+                <description>Speed: -0.2 km/h
+Driven: 588.3 km
+Last Update: 14.7 min ago
+</description>
+                <styleUrl>#152</styleUrl>
+                <Point id="150">
+                    <coordinates>133.386,-16.30846,0.0</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="156">
+                <name>9 - AUSRT</name>
+                <description>Speed: -0.5 km/h
+Driven: 420.6 km
+Last Update: 13.8 min ago
+</description>
+                <styleUrl>#157</styleUrl>
+                <Point id="155">
+                    <coordinates>133.06755,-14.91789,0.0</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="161">
+                <name>92 - Eclipse</name>
+                <description>Speed: 0.1 km/h
+Driven: 632.2 km
+Last Update: 54.6 min ago
+</description>
+                <styleUrl>#162</styleUrl>
+                <Point id="160">
+                    <coordinates>133.41235,-16.67984,0.0</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="171">
+                <name>99 - Solis</name>
+                <description>Speed: -0.0 km/h
+Driven: 495.9 km
+Last Update: 40.0 min ago
+</description>
+                <styleUrl>#172</styleUrl>
+                <Point id="170">
+                    <coordinates>133.21536,-15.57346,0.0</coordinates>
+                </Point>
+            </Placemark>
+        </Folder>
+        <Folder id="8">
+            <Style id="11">
+                <IconStyle id="12">
+                    <colorMode>normal</colorMode>
+                    <scale>2.0</scale>
+                    <heading>0</heading>
+                    <Icon id="13">
+                        <href>https://maps.google.com/mapfiles/kml/paddle/purple-blank.png</href>
+                    </Icon>
+                    <hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
+                </IconStyle>
+            </Style>
+            <Style id="42">
+                <IconStyle id="43">
+                    <colorMode>normal</colorMode>
+                    <scale>2.0</scale>
+                    <heading>0</heading>
+                    <Icon id="44">
+                        <href>https://maps.google.com/mapfiles/kml/paddle/purple-blank.png</href>
+                    </Icon>
+                    <hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
+                </IconStyle>
+            </Style>
+            <Style id="62">
+                <IconStyle id="63">
+                    <colorMode>normal</colorMode>
+                    <scale>2.0</scale>
+                    <heading>0</heading>
+                    <Icon id="64">
+                        <href>https://maps.google.com/mapfiles/kml/paddle/purple-blank.png</href>
+                    </Icon>
+                    <hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
+                </IconStyle>
+            </Style>
+            <Style id="102">
+                <IconStyle id="103">
+                    <colorMode>normal</colorMode>
+                    <scale>2.0</scale>
+                    <heading>0</heading>
+                    <Icon id="104">
+                        <href>https://maps.google.com/mapfiles/kml/paddle/purple-blank.png</href>
+                    </Icon>
+                    <hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
+                </IconStyle>
+            </Style>
+            <Style id="117">
+                <IconStyle id="118">
+                    <colorMode>normal</colorMode>
+                    <scale>2.0</scale>
+                    <heading>0</heading>
+                    <Icon id="119">
+                        <href>https://maps.google.com/mapfiles/kml/paddle/purple-blank.png</href>
+                    </Icon>
+                    <hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
+                </IconStyle>
+            </Style>
+            <Style id="122">
+                <IconStyle id="123">
+                    <colorMode>normal</colorMode>
+                    <scale>2.0</scale>
+                    <heading>0</heading>
+                    <Icon id="124">
+                        <href>https://maps.google.com/mapfiles/kml/paddle/purple-blank.png</href>
+                    </Icon>
+                    <hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
+                </IconStyle>
+            </Style>
+            <Style id="167">
+                <IconStyle id="168">
+                    <colorMode>normal</colorMode>
+                    <scale>2.0</scale>
+                    <heading>0</heading>
+                    <Icon id="169">
+                        <href>https://maps.google.com/mapfiles/kml/paddle/purple-blank.png</href>
+                    </Icon>
+                    <hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
+                </IconStyle>
+            </Style>
+            <name>Cruiser</name>
+            <Placemark id="10">
+                <name>11 - Sunswift</name>
+                <description>Speed: -12.5 km/h
+Driven: 318.2 km
+Last Update: 111.0 min ago
+</description>
+                <styleUrl>#11</styleUrl>
+                <Point id="9">
+                    <coordinates>132.29146,-14.47389,0.0</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="41">
+                <name>25 - VTC</name>
+                <description>Speed: 0.0 km/h
+Driven: 496.0 km
+Last Update: 9.2 min ago
+</description>
+                <styleUrl>#42</styleUrl>
+                <Point id="40">
+                    <coordinates>133.21536,-15.57416,0.0</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="61">
+                <name>35 - Minnesota</name>
+                <description>Speed: 0.0 km/h
+Driven: 322.0 km
+Last Update: 188.6 min ago
+</description>
+                <styleUrl>#62</styleUrl>
+                <Point id="60">
+                    <coordinates>132.32553,-14.48126,0.0</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="101">
+                <name>59 - Onda Solare</name>
+                <description>Speed: -0.0 km/h
+Driven: 431.6 km
+Last Update: 49.6 min ago
+</description>
+                <styleUrl>#102</styleUrl>
+                <Point id="100">
+                    <coordinates>133.08565,-15.01685,0.0</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="116">
+                <name>66 - Solaride</name>
+                <description>Speed: 0.1 km/h
+Driven: 535.2 km
+Last Update: 152.0 min ago
+</description>
+                <styleUrl>#117</styleUrl>
+                <Point id="115">
+                    <coordinates>133.40469,-15.85997,0.0</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="121">
+                <name>67 - DUST</name>
+                <description>Speed: -0.0 km/h
+Driven: 456.9 km
+Last Update: 109.2 min ago
+</description>
+                <styleUrl>#122</styleUrl>
+                <Point id="120">
+                    <coordinates>133.11517,-15.23643,0.0</coordinates>
+                </Point>
+            </Placemark>
+            <Placemark id="166">
+                <name>95 - Apollo</name>
+                <description>Speed: 0.0 km/h
+Driven: 496.0 km
+Last Update: 96.4 min ago
+</description>
+                <styleUrl>#167</styleUrl>
+                <Point id="165">
+                    <coordinates>133.21536,-15.5741,0.0</coordinates>
+                </Point>
+            </Placemark>
+        </Folder>
+        <Folder id="34">
+            <Style id="37">
+                <IconStyle id="38">
+                    <colorMode>normal</colorMode>
+                    <scale>1.0</scale>
+                    <heading>0</heading>
+                    <Icon id="39">
+                        <href>https://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href>
+                    </Icon>
+                    <hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
+                </IconStyle>
+            </Style>
+            <name>Not Competing</name>
+            <Placemark id="36">
+                <name>24 - Archimede</name>
+                <description>Speed: -0.0 km/h
+Driven: 315.3 km
+Last Update: 134.0 min ago
+</description>
+                <styleUrl>#37</styleUrl>
+                <Point id="35">
+                    <coordinates>132.25749,-14.48569,0.0</coordinates>
+                </Point>
+            </Placemark>
+        </Folder>
+    </Document>
+    <NetworkLinkControl>
+        <expires>2025-08-24T09:52:23.174145+00:00</expires>
+    </NetworkLinkControl>
+</kml>
