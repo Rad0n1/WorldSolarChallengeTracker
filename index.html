@@ -4,90 +4,21 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>BWSC Data Logger — Dashboard</title>
+    <link href="https://unpkg.com/maplibre-gl@3.6.1/dist/maplibre-gl.css" rel="stylesheet" />
     <style>
-      :root { --fg:#0f172a; --muted:#64748b; --card:#ffffff; --bg1:#e0f2fe; --bg2:#f0fdfa; }
-      html, body { height:100%; }
-      body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans"; color:var(--fg);
-             background: radial-gradient(1200px 800px at 20% 10%, var(--bg1), transparent),
-                         radial-gradient(1200px 800px at 80% 90%, var(--bg2), #ffffff);
-             display:flex; align-items:center; justify-content:center; }
-      .card { background:var(--card); border-radius:18px; box-shadow:0 10px 30px rgba(2,6,23,.12); padding:2.2rem 2.4rem; width:min(720px, 92vw); }
-      h1 { margin:0 0 .75rem 0; font-size:1.6rem; letter-spacing:.2px; }
-      p.subtitle { margin:.25rem 0 1.25rem 0; color:var(--muted); }
-      .grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap:1rem; }
-      .tile { border:1px solid #e2e8f0; border-radius:14px; padding:1rem 1.1rem; }
-      .k { font-size:.9rem; color:var(--muted); }
-      .v { font-size:1.6rem; font-variant-numeric: tabular-nums; margin-top:.15rem; }
-      .ok { color:#16a34a; }
-      .warn { color:#ca8a04; }
-      .err { color:#dc2626; }
-      footer { margin-top:1rem; color:var(--muted); font-size:.9rem; display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; }
-      code { background:#f1f5f9; padding:.1rem .35rem; border-radius:6px; }
-      button.refresh { border:none; background:#0ea5e9; color:#fff; padding:.5rem .8rem; border-radius:10px; cursor:pointer; box-shadow:0 4px 14px rgba(14,165,233,.35); }
-      button.refresh:disabled { opacity:.6; cursor:default; }
+      #map { height: 70vh; min-height: 420px; }
+      #ui { display:flex; gap:12px; align-items:center; margin: 8px 0; }
+      #clock { font: 12px ui-monospace, SFMono-Regular, Menlo, monospace; }
     </style>
+    <script src="https://unpkg.com/maplibre-gl@3.6.1/dist/maplibre-gl.js"></script>
+    <script defer src="./assets/map.js"></script>
   </head>
   <body>
-    <main class="card">
-      <h1>BWSC Data Logger — Dashboard</h1>
-      <p class="subtitle">Live snapshot of the <code>alldata-latest.csv</code> from telemetry.</p>
-      <section class="grid">
-        <div class="tile">
-          <div class="k">Data points in CSV</div>
-          <div class="v" id="rowCount">—</div>
-        </div>
-        <div class="tile">
-          <div class="k">Current CSV size (MB)</div>
-          <div class="v" id="csvSize">—</div>
-        </div>
-        <div class="tile">
-          <div class="k">Last updated (UTC)</div>
-          <div class="v" id="lastUpdated">—</div>
-        </div>
-        <div class="tile">
-          <div class="k">Status</div>
-          <div class="v" id="status">checking…</div>
-        </div>
-      </section>
-      <footer>
-        <div>Analysis is currently WIP. Stand by…</div>
-        <div>
-          <button class="refresh" id="btnRefresh">Refresh now</button>
-          <span class="k">Auto-refresh every 60s</span>
-        </div>
-      </footer>
-
-      <hr style="margin:2rem 0;border:none;border-top:1px solid #e2e8f0"/>
-
-      <section>
-        <h2 style="margin:.25rem 0 1rem 0; font-size:1.25rem;">Scrubber Leaderboard (every 5 minutes)</h2>
-        <p class="subtitle">Only showing <code>Challenger</code> class teams. Pick a time; we compute each team’s cumulative distance up to the <em>closest</em> sample to that time and rank them.</p>
-
-        <div style="display:grid; gap:1rem; grid-template-columns: 1fr;">
-          <div>
-            <label class="k">Time</label>
-            <div style="display:flex; align-items:center; gap:1rem;">
-              <input id="scrubber" type="range" min="0" max="100" value="0" step="300000" style="width:100%" />
-              <div class="v" id="scrubTime">—</div>
-            </div>
-          </div>
-
-          <div class="tile">
-            <div class="k">Current leader (team key)</div>
-            <div class="v" id="leaderKey">—</div>
-          </div>
-
-          <div class="tile">
-            <div class="k">Standings by distance (km)</div>
-            <ol id="leaderboard" style="margin:.5rem 0 0 1.25rem;"></ol>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <script type="module">
-      import './assets/dashboard.js';
-      import './assets/scrubber.js';
-    </script>
+    <div id="ui">
+      <input id="slider" type="range">
+      <div id="clock">—</div>
+      <button id="animate">Play animation</button>
+    </div>
+    <div id="map"></div>
   </body>
 </html>
