@@ -9,6 +9,36 @@
       #map { height: 70vh; min-height: 420px; }
       #ui { display:flex; gap:12px; align-items:center; margin: 8px 0; }
       #clock { font: 12px ui-monospace, SFMono-Regular, Menlo, monospace; }
+      #team-filter {
+        max-height: 260px;
+        overflow: auto;
+        padding: 6px;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        background: #fff;
+        font: 14px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      }
+      #team-filter .team-option {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 8px;
+        border-radius: 8px;
+        margin: 2px 0;
+        cursor: pointer;
+      }
+      #team-filter .team-option:hover {
+        background: #f3f4f6;
+      }
+      #team-filter input[type="radio"] {
+        accent-color: #10b981; /* green */
+      }
+      #team-filter .group-header {
+        position: sticky; top: 0;
+        background: #fff; z-index: 1;
+        font-weight: 600; color: #6b7280;
+        padding: 4px 6px; margin: 0 0 4px;
+      }
     </style>
     <script src="https://unpkg.com/maplibre-gl@3.6.1/dist/maplibre-gl.js"></script>
     <script defer src="./assets/map.js"></script>
@@ -20,5 +50,6 @@
       <button id="animate">Play animation</button>
     </div>
     <div id="map"></div>
+    <div id="team-filter"></div>
   </body>
 </html>

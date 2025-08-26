@@ -115,7 +115,44 @@ function initMap(){
                 'text-halo-width': 1.2
             }
         });
+
+        // Selected circle layer ABOVE 'teams-dot'
+        map.addLayer({
+            id: 'teams-dot-selected',
+            type: 'circle',
+            source: 'teams',
+            filter: ['==', ['get','teamId'], '__none__'], // placeholder, updated later
+            paint: {
+                'circle-radius': 10,
+                'circle-color': '#10b981',       // green
+                'circle-stroke-color': '#064e3b',
+                'circle-stroke-width': 2
+            }
+        });
+
+        // Selected label layer ABOVE 'team-labels'
+        map.addLayer({
+            id: 'team-labels-selected',
+            type: 'symbol',
+            source: 'teams',
+            filter: ['==', ['get','teamId'], '__none__'],
+            layout: {
+                'text-field': ['get', 'name'],
+                'text-font': ['Open Sans Regular','Noto Sans Regular'],
+                'text-size': 12,
+                'text-offset': [0, 1.6],
+                'text-anchor': 'bottom',
+                'text-allow-overlap': true   // ensure it renders even if others collide
+            },
+            paint: {
+                'text-color': '#10b981',
+                'text-halo-color': '#ffffff',
+                'text-halo-width': 1.2
+            }
+        });
+
         initSlider();
+        updateSelectedStyling();
         renderSnapshot(0);
 
         map.resize();
@@ -171,8 +208,84 @@ function initSlider() {
   update();
 }
 
+let selectedTeamId = 'Top Dutch'; // or a default id
+
+function renderTeamRadios(defs) {
+  const wrap = document.getElementById('team-filter');
+  wrap.innerHTML = '';
+  wrap.setAttribute('role', 'radiogroup');
+  wrap.setAttribute('aria-label', 'Select team');
+
+  // sort alphabetically by display name (case-insensitive)
+  const sorted = [...defs].sort((a, b) =>
+    (a.name || a.id).localeCompare(b.name || b.id, undefined, { sensitivity: 'base' })
+  );
+
+  const make = (id, name) => {
+    const label = document.createElement('label');
+    label.className = 'team-option';
+    label.title = name;
+
+    const input = document.createElement('input');
+    input.type = 'radio';
+    input.name = 'teamPick';
+    input.value = id;
+    input.checked = (id === selectedTeamId);
+
+    input.addEventListener('change', () => {
+      selectedTeamId = id;
+      updateSelectedStyling();
+    });
+
+    const text = document.createElement('span');
+    text.textContent = name;
+
+    label.appendChild(input);
+    label.appendChild(text);
+    return label;
+  };
+
+  // “None” option to clear selection
+  wrap.appendChild(make('', 'None'));
+
+  for (const d of sorted) {
+    wrap.appendChild(make(d.id, d.name || d.id));
+  }
+}
+
+function circlePaintExpression(selectedId) {
+    const normalColorMatch = '#ff0000ff'
+
+  if (!selectedId) {
+    // No selection: everyone uses normal colors
+    return normalColorMatch;
+  }
+
+  // Selected team -> green, others -> normal colors (or make them gray if you prefer)
+  return [
+    'case',
+    ['==', ['get', 'teamId'], selectedId], '#00ff15ff',  // selected = green
+    normalColorMatch                                   // others = original color map
+  ];
+}
+
+function updateSelectedStyling() {
+  // Update circle color
+  map.setPaintProperty('teams-dot', 'circle-color', circlePaintExpression(selectedTeamId));
+  // (Optional) bump selected dot size:
+  map.setPaintProperty('teams-dot', 'circle-radius', [
+    'case',
+    ['==', ['get','teamId'], selectedTeamId], 10,
+    8
+  ]);
+
+  map.setFilter('teams-dot-selected', ['==', ['get','teamId'], selectedTeamId]);
+  map.setFilter('team-labels-selected', ['==', ['get','teamId'], selectedTeamId]);
+}
+
 (async function main() {
   const defs = await loadManifest();
   await loadEntriesFor(defs);
   initMap();
+  renderTeamRadios(defs);
 })();
